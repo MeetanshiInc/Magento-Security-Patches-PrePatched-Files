@@ -1,0 +1,4 @@
+skin/adminhtml/default/default/media/flex.swf
+skin/adminhtml/default/default/media/uploader.swf
+skin/adminhtml/default/default/media/uploaderSingle.swf
+files-to-delete.txt
