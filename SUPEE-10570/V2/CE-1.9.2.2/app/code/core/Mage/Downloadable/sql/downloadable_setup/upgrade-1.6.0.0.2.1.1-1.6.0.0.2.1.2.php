@@ -26,7 +26,7 @@
 /** @var $installer Mage_Core_Model_Resource_Setup */
 $installer = $this;
 $installer->startSetup();
-connection = $installer->getConnection();
+$connection = $installer->getConnection();
 $connection->delete(
     $this->getTable('core_config_data'),
     $connection->prepareSqlCondition('path', array(
