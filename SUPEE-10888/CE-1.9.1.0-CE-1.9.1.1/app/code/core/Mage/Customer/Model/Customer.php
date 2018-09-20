@@ -1331,7 +1331,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
                 self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_CUSTOMER_ID
             );
         }
-       $this->_getResource()->changeResetPasswordLinkCustomerId($this, newResetPasswordLinkCustomerId);
+       $this->_getResource()->changeResetPasswordLinkCustomerId($this, $newResetPasswordLinkCustomerId);
         return $this;
     }
 
