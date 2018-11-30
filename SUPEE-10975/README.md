@@ -1,4 +1,4 @@
-Magento SUPEE-10888contain multiple security enhancements that help close cross-site scripting (XSS), Remote Code Execution(RCE), cross-site request forgery (CSRF) and other vulnerabilities.
+***Magento SUPEE-10975*** contains multiple security enhancements that help close cross-site scripting (XSS), Remote Code Execution(RCE), cross-site request forgery (CSRF) and other vulnerabilities.
 
 
 Here's a detailed patching guide to install <strong>[Magento SUPEE 10975](https://meetanshi.com/blog/install-magento-supee-10975/)</strong> with or without SSH .
