@@ -33,6 +33,11 @@
  */
 class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_Action
 {
+    public function preDispatch()
+    {
+        $this->_setForcedFormKeyActions(array('create', 'massDelete'));
+        return parent::preDispatch();
+    }
     /**
      * Backup list action
      */

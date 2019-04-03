@@ -25,225 +25,52 @@
  */
 
 /**
- * Customer edit block
+ * Customer group edit block
  *
  * @category   Mage
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Catalog_Product_Edit extends Mage_Adminhtml_Block_Widget
+class Mage_Adminhtml_Block_Customer_Group_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
+
     public function __construct()
     {
         parent::__construct();
-        $this->setTemplate('catalog/product/edit.phtml');
-        $this->setId('product_edit');
-    }
 
-    /**
-     * Retrieve currently edited product object
-     *
-     * @return Mage_Catalog_Model_Product
-     */
-    public function getProduct()
-    {
-        return Mage::registry('current_product');
-    }
+        $this->_objectId = 'id';
+        $this->_controller = 'customer_group';
 
-    protected function _prepareLayout()
-    {
-        if (!$this->getRequest()->getParam('popup')) {
-            $this->setChild('back_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Back'),
-                        'onclick'   => 'setLocation(\''.$this->getUrl('*/*/', array('store'=>$this->getRequest()->getParam('store', 0))).'\')',
-                        'class' => 'back'
-                    ))
-            );
-        } else {
-            $this->setChild('back_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Close Window'),
-                        'onclick'   => 'window.close()',
-                        'class' => 'cancel'
-                    ))
-            );
+        $this->_updateButton('save', 'label', Mage::helper('customer')->__('Save Customer Group'));
+        $this->_updateButton('delete', 'label', Mage::helper('customer')->__('Delete Customer Group'));
+
+        if(!Mage::registry('current_group')->getId() || Mage::registry('current_group')->usesAsDefault()) {
+            $this->_removeButton('delete');
         }
-
-        if (!$this->getProduct()->isReadonly()) {
-            $this->setChild('reset_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Reset'),
-                        'onclick'   => 'setLocation(\''.$this->getUrl('*/*/*', array('_current'=>true)).'\')'
-                    ))
-            );
-
-            $this->setChild('save_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Save'),
-                        'onclick'   => 'productForm.submit()',
-                        'class' => 'save'
-                    ))
-            );
-        }
-
-        if (!$this->getRequest()->getParam('popup')) {
-            if (!$this->getProduct()->isReadonly()) {
-                $this->setChild('save_and_edit_button',
-                    $this->getLayout()->createBlock('adminhtml/widget_button')
-                        ->setData(array(
-                            'label'     => Mage::helper('catalog')->__('Save and Continue Edit'),
-                            'onclick'   => 'saveAndContinueEdit(\''.$this->getSaveAndContinueUrl().'\')',
-                            'class' => 'save'
-                        ))
-                );
-            }
-            if ($this->getProduct()->isDeleteable()) {
-                $this->setChild('delete_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                        ->setData(array(
-                            'label'     => Mage::helper('catalog')->__('Delete'),
-                            'onclick'   => 'confirmSetLocation(\''.Mage::helper('catalog')->__('Are you sure?').'\', \''.$this->getDeleteUrl().'\')',
-                            'class'  => 'delete'
-                        ))
-                );
-            }
-
-            if ($this->getProduct()->isDuplicable()) {
-                $this->setChild('duplicate_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Duplicate'),
-                        'onclick'   => 'setLocation(\'' . $this->getDuplicateUrl() . '\')',
-                        'class'  => 'add'
-                    ))
-                );
-            }
-        }
-
-        return parent::_prepareLayout();
-    }
-
-    public function getBackButtonHtml()
-    {
-        return $this->getChildHtml('back_button');
-    }
-
-    public function getCancelButtonHtml()
-    {
-        return $this->getChildHtml('reset_button');
-    }
-
-    public function getSaveButtonHtml()
-    {
-        return $this->getChildHtml('save_button');
-    }
-
-    public function getSaveAndEditButtonHtml()
-    {
-        return $this->getChildHtml('save_and_edit_button');
-    }
-
-    public function getDeleteButtonHtml()
-    {
-        return $this->getChildHtml('delete_button');
-    }
-
-    public function getDuplicateButtonHtml()
-    {
-        return $this->getChildHtml('duplicate_button');
-    }
-
-    public function getValidationUrl()
-    {
-        return $this->getUrl('*/*/validate', array('_current'=>true));
-    }
-
-    public function getSaveUrl()
-    {
-        return $this->getUrl('*/*/save', array('_current'=>true, 'back'=>null));
-    }
-
-    public function getSaveAndContinueUrl()
-    {
-        return $this->getUrl('*/*/save', array(
-            '_current'   => true,
-            'back'       => 'edit',
-            'tab'        => '{{tab_id}}',
-            'active_tab' => null
-        ));
-    }
-
-    public function getProductId()
-    {
-        return $this->getProduct()->getId();
-    }
-
-    public function getProductSetId()
-    {
-        $setId = false;
-        if (!($setId = $this->getProduct()->getAttributeSetId()) && $this->getRequest()) {
-            $setId = $this->getRequest()->getParam('set', null);
-        }
-        return $setId;
-    }
-
-    public function getIsGrouped()
-    {
-        return $this->getProduct()->isGrouped();
     }
 
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', array('_current'=>true));
+        if (!Mage::getSingleton('adminhtml/url')->useSecretKey()) {
+            return $this->getUrl('*/*/delete', array(
+                $this->_objectId => $this->getRequest()->getParam($this->_objectId),
+                'form_key' => Mage::getSingleton('core/session')->getFormKey()
+            ));
+        } else {
+            return parent::getDeleteUrl();
+            }
     }
 
-    public function getDuplicateUrl()
+    public function getHeaderText()
     {
-        return $this->getUrl('*/*/duplicate', array('_current'=>true));
+        if(!is_null(Mage::registry('current_group')->getId())) {
+            return Mage::helper('customer')->__('Edit Customer Group "%s"', $this->htmlEscape(Mage::registry('current_group')->getCustomerGroupCode()));
+        } else {
+            return Mage::helper('customer')->__('New Customer Group');
+        }
     }
 
-    public function getHeader()
-    {
-        $header = '';
-        if ($this->getProduct()->getId()) {
-            $header = $this->htmlEscape($this->getProduct()->getName());
-        }
-        else {
-            $header = Mage::helper('catalog')->__('New Product');
-        }
-        if ($setName = $this->getAttributeSetName()) {
-            $header.= ' (' . $setName . ')';
-        }
-        return $header;
-    }
-
-    public function getAttributeSetName()
-    {
-        if ($setId = $this->getProduct()->getAttributeSetId()) {
-            $set = Mage::getModel('eav/entity_attribute_set')
-                ->load($setId);
-            return $set->getAttributeSetName();
-        }
-        return '';
-    }
-
-    public function getIsConfigured()
-    {
-        if ($this->getProduct()->isConfigurable()
-            && !($superAttributes = $this->getProduct()->getTypeInstance(true)->getUsedProductAttributeIds($this->getProduct()))) {
-            $superAttributes = false;
-        }
-
-        return !$this->getProduct()->isConfigurable() || $superAttributes !== false;
-    }
-
-    public function getSelectedTabId()
-    {
-        return addslashes(htmlspecialchars($this->getRequest()->getParam('tab')));
+    public function getHeaderCssClass() {
+        return 'icon-head head-customer-groups';
     }
 }

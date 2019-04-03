@@ -58,6 +58,18 @@ class Mage_Adminhtml_Block_Customer_Group_Edit extends Mage_Adminhtml_Block_Widg
         }
     }
 
+    public function getDeleteUrl()
+    {
+        if (!Mage::getSingleton('adminhtml/url')->useSecretKey()) {
+            return $this->getUrl('*/*/delete', array(
+                $this->_objectId => $this->getRequest()->getParam($this->_objectId),
+                'form_key' => Mage::getSingleton('core/session')->getFormKey()
+            ));
+        } else {
+            return parent::getDeleteUrl();
+            }
+    }
+
     public function getHeaderCssClass() {
         return 'icon-head head-customer-groups';
     }
