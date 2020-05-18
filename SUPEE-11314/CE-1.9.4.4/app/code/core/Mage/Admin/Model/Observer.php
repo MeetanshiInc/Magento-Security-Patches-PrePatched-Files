@@ -133,6 +133,11 @@ class Mage_Admin_Model_Observer
     {
         $password = $observer->getEvent()->getPassword();
         $user = $observer->getEvent()->getUser();
+        $authResult = $observer->getEvent()->getResult();
+
+        if (!$authResult) {
+            return;
+        }
 
         if (
             !(bool) $user->getPasswordUpgraded()
