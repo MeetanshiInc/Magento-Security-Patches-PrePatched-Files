@@ -7,7 +7,7 @@ This guide explains how to apply Magento 2 core file changes (`Category.php` and
 You have two modified core Magento files:
 
 * `vendor/magento/module-catalog/Helper/Category.php`
-* `vendor/magento/module-catalog/Model/Layer/Filter/Filter.php`
+* `vendor/magento/module-email/Model/Template/Filter.php`
 
 These are part of a pre-release patch or security update. **Do not copy them directly into the `vendor/` directory**, as it is managed by Composer and any manual changes will be lost on update.
 
