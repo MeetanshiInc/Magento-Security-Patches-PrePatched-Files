@@ -1,4 +1,4 @@
-#APSB25-50 Patch Installation
+# APSB25-50 Patch Installation
 
 This guide explains how to apply Magento 2 core file changes (`Category.php` and `Filter.php`) as a patch using Composer, without directly modifying files in the `vendor/` directory.
 
