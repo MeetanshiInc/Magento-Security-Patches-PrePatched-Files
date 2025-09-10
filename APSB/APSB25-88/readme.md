@@ -66,6 +66,7 @@ System > Cache Management > Flush Magento Cache
 ---
 
 ## References  
-
+- Here's a detailed patching guide to [Magento Open Source Security Update APSB25-50](https://meetanshi.com/blog/apsb25-88-security-patches-for-magento/).
+- Install the Patches you want, visit [Magento Security Patches Installation Service](https://meetanshi.com/magento-security-patches-installation-service.html).
 - [Adobe Security Bulletin APSB25-88](https://helpx.adobe.com/security.html)  
 - [Magento DevDocs: Apply patches](https://developer.adobe.com/commerce)
